@@ -21,15 +21,30 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(ProjectRepository $projectRepository): Response
     {
-        $projects = $projectRepository->findAll();
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+    
+        // Récupérer l'utilisateur connecté
+        $user = $this->getUser();
+    
+        // Vérifier si l'utilisateur est admin
+        if (in_array('ROLE_ADMIN', $user->getRoles())) {
+            // Si l'utilisateur est admin, il peut voir tous les projets
+            $projects = $projectRepository->findAll();
+        } else {
+            // Si l'utilisateur n'est pas admin, il ne voit que les projets auxquels il est associé
+            $projects = $projectRepository->findByUser($user);
+        }
+    
         return $this->render('home/index.html.twig', [
             'projects' => $projects,
         ]);
     }
+    
 
     #[Route('/add-project', name: 'app_project_add')]
     public function addProject(Request $request, EntityManagerInterface $entityManager, ProjectRepository $projectRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $project = new Project();
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
@@ -49,6 +64,7 @@ class HomeController extends AbstractController
     #[Route('/edit-project/{id}', name: 'app_project_edit')]
     public function editProject($id, Request $request, EntityManagerInterface $entityManager, ProjectRepository $projectRepository): Response
     {    
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $project = $projectRepository->find($id);
     
         $form = $this->createForm(ProjectType::class, $project);
@@ -70,6 +86,7 @@ class HomeController extends AbstractController
     #[Route('/delete-project/{id}', name: 'app_project_delete')]
     public function deleteProject($id, EntityManagerInterface $entityManager, ProjectRepository $projectRepository): Response
     {    
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $project = $projectRepository->find($id);
 
         $entityManager->remove($project);
@@ -81,7 +98,8 @@ class HomeController extends AbstractController
 
     #[Route('/project/{id}', name: 'app_detail')]
     public function projectDetail($id, StatutRepository $statutRepository, TaskRepository $taskRepository, ProjectRepository $projectRepository ): Response
-    {
+    { 
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $project = $projectRepository->find($id);        
         $statuts = $statutRepository->findAll();
@@ -100,6 +118,7 @@ class HomeController extends AbstractController
     #[Route('/add-task/{id}', name: 'app_task_add')]
     public function addTask(Project $Id, Request $request, EntityManagerInterface $entityManager, TaskRepository $taskRepository, ProjectRepository $projectRepository): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
@@ -128,6 +147,7 @@ class HomeController extends AbstractController
     #[Route('/edit-task/{id}', name: 'app_task_edit')]
     public function editTask($id, Request $request, EntityManagerInterface $entityManager, TaskRepository $taskRepository): Response
     {    
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $task = $taskRepository->find($id);
     
         if (!$task) {

@@ -12,9 +12,16 @@
                 <i class="fa-solid fa-list-check"></i> Projets
                 </a>
             </li>
+            {% if is_granted('ROLE_ADMIN') %}
             <li>
                 <a href="{{ path('app_users') }}">
                 <i class="fa-regular fa-user"></i> Équipe
+                </a>
+            </li>
+            {% endif %}
+            <li>
+                <a href="{{ path('app_logout') }}">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
                 </a>
             </li>
         </ul>

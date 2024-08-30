@@ -18,6 +18,11 @@
                 <i class="fa-regular fa-user"></i> Équipe
                 </a>
             </li>
+            <li>
+                <a href="{{ path('app_logout') }}">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+                </a>
+            </li>
         </ul>
         </nav>
         <main>
@@ -32,6 +37,7 @@
                 <thead>
                     <tr>
                     <th>Prénom, Nom</th>
+                    <th>Role</th>
                     <th>Statut</th>
                     <th>Actions</th>
                     </tr>
@@ -50,6 +56,13 @@
                                 </div>
                             </div>
                         </td>
+                        <th>                            
+                            {% if 'ROLE_ADMIN' in user.roles %}
+                                Chef de projet
+                            {% else %}
+                                Collaborateur
+                            {% endif %}
+                        </th>
                         <td>{{user.contract}}</td>
                         <td>
                             <a class="button button-edit-team" href="{{ path('app_user_edit',{'id': user.id}) }}">
@@ -58,6 +71,14 @@
                             <a class="delete-team" href="{{ path('app_user_delete',{'id': user.id}) }}">
                             Supprimer
                             </a>
+
+                                            
+                            {% if 'ROLE_ADMIN' in user.roles %}
+                                Administrateur
+                            {% else %}
+                                <a href="{{ path('make_admin', {'id': user.id}) }}">Rendre Admin</a>
+
+                            {% endif %}
                         </td>
                         </tr>
                     {% endfor %}

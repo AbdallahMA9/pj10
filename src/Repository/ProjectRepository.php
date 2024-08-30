@@ -5,7 +5,7 @@ namespace App\Repository;
 use App\Entity\Project;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-
+use App\Entity\User;
 /**
  * @extends ServiceEntityRepository<Project>
  */
@@ -15,6 +15,18 @@ class ProjectRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Project::class);
     }
+
+
+    public function findByUser(User $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->join('p.users', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $user->getId())
+            ->getQuery()
+            ->getResult();
+    }
+
 
     //    /**
     //     * @return Project[] Returns an array of Project objects
