@@ -24,7 +24,7 @@ nav {
     width: 300px;
     flex-grow: 0;
     flex-shrink: 0;
-    background: url('../img/bg-menu.svg') center bottom no-repeat #1C5B50;
+    background: url('/img/bg-menu.svg') center bottom no-repeat #1C5B50;
     padding: 50px 15px;
 }
 
@@ -487,6 +487,123 @@ form .select2-container--default .select2-selection--multiple .select2-selection
     font-size: 16px;
 }
 
+header.logout-header {
+    background: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+body.logout-page {
+    background: url("/img/bg-logout.png") center center no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+div#main-content-logout {
+    background: #4D8077;
+    width: 710px;
+    max-width: 100%;
+    margin: auto;
+    border-radius: 30px;
+    padding-top: 75px;
+    padding-bottom: 75px;
+}
+
+div#main-content-logout form {
+    margin: auto;
+    width: 350px;
+}
+
+div#main-content-logout h1 {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 46px;
+    text-align: center;
+    color: #ffffff;
+    margin-top: 0;
+}
+
+div#main-content-logout label {
+    color: #ffffff;
+}
+
+a.link-logout {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: 0em;
+    text-align: center;
+    display: block;
+    margin-top: 20px;
+    color: #ffffff;
+}
+
+div#main-content-logout p {
+    color: #ffffff;
+    text-align: center;
+    font-size: 18px;
+    margin-top: 40px;
+}
+
+div#main-content-logout .subtitle {
+    font-size: 22px;
+}
+
+a.button.login-button {
+    margin-top: 65px;
+    background: #1C5B50;
+    color: #ffff;
+}
+
+div#main-content-logout .button {
+    width: 225px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    height: 75px;
+}
+
+.separator {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    width: 400px;
+    margin: 35px auto;
+    justify-content: space-between;
+}
+
+.separator hr {
+    width: 130px;
+    border: none;
+    height: 1px;
+    background: #fff;
+}
+
+div#main-content-logout form .button {
+    width: 100%;
+}
+
+.error-login {
+    text-align: center;
+    color: #E14343;
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 15px;
+}
+
+div#current-user .avatar {
+    border: 1px solid #1C5B50;
+    color: #1C5B50;
+    text-decoration: none;
+    margin-left: auto;
+    background: #fff;
+    font-size: 18px;
+    font-weight: 700;
+}
+
 @media (max-width: 992px) {
     nav {
         width: 150px;
@@ -528,4 +645,5 @@ form .select2-container--default .select2-selection--multiple .select2-selection
         border-radius: 0;
         padding: 13px;
     }
+
 }

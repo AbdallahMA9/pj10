@@ -30,7 +30,10 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
-
+            $user->setVerified(true);
+            $user->setStartedAt(new \DateTimeImmutable());
+            $user->setContract('CDI');
+            
             $entityManager->persist($user);
             $entityManager->flush();
 
