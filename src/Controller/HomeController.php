@@ -15,13 +15,14 @@ use App\Entity\Project;
 use App\Form\TaskType;
 use App\Form\ProjectType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class HomeController extends AbstractController
 {
+    #[IsGranted("ROLE_USER")]
     #[Route('/', name: 'app_home')]
     public function index(ProjectRepository $projectRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
     
         // Récupérer l'utilisateur connecté
         $user = $this->getUser();
@@ -40,11 +41,10 @@ class HomeController extends AbstractController
         ]);
     }
     
-
+    #[IsGranted("ROLE_ADMIN")]
     #[Route('/add-project', name: 'app_project_add')]
     public function addProject(Request $request, EntityManagerInterface $entityManager, ProjectRepository $projectRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $project = new Project();
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
@@ -61,10 +61,10 @@ class HomeController extends AbstractController
         ]);
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route('/edit-project/{id}', name: 'app_project_edit')]
     public function editProject($id, Request $request, EntityManagerInterface $entityManager, ProjectRepository $projectRepository): Response
     {    
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $project = $projectRepository->find($id);
     
         $form = $this->createForm(ProjectType::class, $project);
@@ -83,10 +83,10 @@ class HomeController extends AbstractController
         ]);
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route('/delete-project/{id}', name: 'app_project_delete')]
     public function deleteProject($id, EntityManagerInterface $entityManager, ProjectRepository $projectRepository): Response
     {    
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $project = $projectRepository->find($id);
 
         $entityManager->remove($project);
@@ -96,10 +96,10 @@ class HomeController extends AbstractController
 
     }
 
+    #[IsGranted("ROLE_USER")]
     #[Route('/project/{id}', name: 'app_detail')]
     public function projectDetail($id, StatutRepository $statutRepository, TaskRepository $taskRepository, ProjectRepository $projectRepository ): Response
     { 
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $project = $projectRepository->find($id);        
         $statuts = $statutRepository->findAll();
@@ -114,11 +114,10 @@ class HomeController extends AbstractController
 
     }
 
-
+    #[IsGranted("ROLE_USER")]
     #[Route('/add-task/{id}', name: 'app_task_add')]
     public function addTask(Project $Id, Request $request, EntityManagerInterface $entityManager, TaskRepository $taskRepository, ProjectRepository $projectRepository): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
         $form->handleRequest($request);
@@ -144,10 +143,10 @@ class HomeController extends AbstractController
         ]);
     }
 
+    #[IsGranted("ROLE_ADMIN")]
     #[Route('/edit-task/{id}', name: 'app_task_edit')]
     public function editTask($id, Request $request, EntityManagerInterface $entityManager, TaskRepository $taskRepository): Response
     {    
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $task = $taskRepository->find($id);
     
         if (!$task) {
@@ -170,7 +169,7 @@ class HomeController extends AbstractController
         ]);
     }
     
-
+    #[IsGranted("ROLE_ADMIN")]
     #[Route('/delete-task/{id}', name: 'app_task_delete')]
     public function deleteTask($id, EntityManagerInterface $entityManager, TaskRepository $taskRepository): Response
     {    

@@ -17,20 +17,17 @@ class UserController extends AbstractController
     #[Route('/users', name: 'app_users')]
     public function listUsers(UserRepository $userRepository): Response
     { 
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $users = $userRepository->findAll();
         return $this->render('user/index.html.twig', [
             'users' => $users,
         ]);
     }
 
-    #[Route('/edit-user/{id}', name: 'app_user_edit')]
+    #[Route('/users/edit-user/{id}', name: 'app_user_edit')]
     public function editUser($id, Request $request, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {    
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
-        $user = $userRepository->find($id);
+        $user = $id;
     
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
@@ -45,11 +42,9 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[Route('/delete-user/{id}', name: 'app_user_delete')]
+    #[Route('/users/delete-user/{id}', name: 'app_user_delete')]
     public function deleteUser($id, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
-    {    
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
+    {   
         $user = $userRepository->find($id);
 
         $entityManager->remove($user);
@@ -63,8 +58,6 @@ class UserController extends AbstractController
     public function makeAdmin($id, UserRepository $userRepository, EntityManagerInterface $em): Response
     {
 
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
         // Récupérez l'utilisateur à partir de la base de données
         $user = $userRepository->find($id);
     
@@ -74,7 +67,7 @@ class UserController extends AbstractController
         }
     
         // Mettez à jour les rôles de l'utilisateur
-        $user->setRoles(['ROLE_USER','ROLE_ADMIN']);
+        $user->setRoles(['ROLE_ADMIN']);
         $em->flush();
     
         // Redirigez vers la page de liste des utilisateurs
